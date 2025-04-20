@@ -12,4 +12,5 @@ helm install rancher rancher-latest/rancher \
   --set privateCA=false \
   --set replicas=1 \
   --set global.cattle.psp.enabled=false
+  --set bootstrapPassword=admin
 kubectl rollout status deployment rancher -n cattle-system --timeout=300s
