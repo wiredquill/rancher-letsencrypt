@@ -1,30 +1,44 @@
-# Rancher Bootstrap Scripts
+# Rancher Bootstrap Scripts (Templated)
 
-This repo contains scripts and manifests to provision a K3s cluster with Rancher and Cert-Manager using Let's Encrypt and Cloudflare DNS challenge.
+This project automates the setup of Rancher using K3s, Cert-Manager, and Let's Encrypt with Cloudflare DNS.
 
-## 📦 Components
-- **K3s** (v1.31.6+k3s1) — no Traefik
-- **Cert-Manager** (v1.17.1)
-- **Rancher** — latest Helm chart
-- **Let's Encrypt ClusterIssuer** using Cloudflare DNS
-- **TLS Certificate** for `rancher.wiredquill.com`
+## 🧩 Files & Templates
 
-## 🚀 Usage
+- `config.env.example` – Copy this to `config.env` and edit for your domain
+- `1-install-k3s.sh` – Installs K3s (no Traefik) and sets up kubeconfig for user 'erin'
+- `2-install-cert-manager.sh` – Installs cert-manager v1.17.1
+- `3-install-rancher.sh` – Installs Rancher via Helm using the hostname from config
+- `clusterissuer.yaml.template` – Cert-Manager issuer using Cloudflare DNS challenge
+- `rancher-cert.yaml.template` – TLS cert for Rancher ingress
+- `bootstrap.sh` – Optional script to render YAMLs and apply everything
 
-Run these steps on a clean Linux node (SLES, Ubuntu, etc.):
+## 🚀 Quick Start
 
-```bash
-chmod +x install-*.sh
-./install-k3s.sh
-./install-cert-manager.sh
+1. Copy and edit your configuration:
+   ```bash
+   cp config.env.example config.env
+   nano config.env
+   ```
 
-# Manually create your Cloudflare secret
-kubectl create ns cert-manager
-kubectl create secret generic cloudflare-api-token-secret \
-  --from-literal=api-token='YOUR_CLOUDFLARE_API_TOKEN' \
-  -n cert-manager
+2. Run scripts in order:
+   ```bash
+   chmod +x *.sh
+   ./1-install-k3s.sh
+   ./2-install-cert-manager.sh
+   ./bootstrap.sh
+   ./3-install-rancher.sh
+   ```
 
-# Apply issuer and Rancher certificate
-kubectl apply -f clusterissuer.yaml
-./install-rancher.sh
-kubectl apply -f rancher-cert.yaml
+## 🔧 Hardcoding Instead?
+
+If you prefer **not to use templates**, just replace values like domain and email directly inside:
+- `clusterissuer.yaml`
+- `rancher-cert.yaml`
+- Helm commands in `3-install-rancher.sh`
+
+Then skip the `.env` and `envsubst` steps entirely.
+
+## 📎 Requirements
+
+- Cloudflare API token with DNS edit permissions
+- DNS A record pointing your domain (e.g. rancher.example.com) to the node IP

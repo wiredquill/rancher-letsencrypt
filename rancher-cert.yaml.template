@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: rancher-wiredquill-tls
+  name: rancher-cert
   namespace: cattle-system
 spec:
   secretName: tls-rancher-ingress
   issuerRef:
     name: cloudflare-clusterissuer
     kind: ClusterIssuer
-  commonName: rancher.wiredquill.com
+  commonName: ${RANCHER_HOSTNAME}
   dnsNames:
-  - rancher.wiredquill.com
+  - ${RANCHER_HOSTNAME}
