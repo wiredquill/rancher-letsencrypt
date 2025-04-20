@@ -28,11 +28,3 @@ kubectl create secret generic cloudflare-api-token-secret \
 kubectl apply -f clusterissuer.yaml
 ./install-rancher.sh
 kubectl apply -f rancher-cert.yaml
-```
-
-## 💡 Notes
-- Ensure DNS (e.g., Cloudflare) points `rancher.wiredquill.com` to the node IP
-- Cert-Manager will handle TLS via DNS-01 challenge
-
-## 📁 Cloud Init
-You can use `cloud-init.yaml` for automatic provisioning in cloud environments.
