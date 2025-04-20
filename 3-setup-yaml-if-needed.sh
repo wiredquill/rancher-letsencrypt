@@ -5,6 +5,7 @@ export RANCHER_HOSTNAME
 export CLOUDFLARE_EMAIL
 
 echo "[+] Creating Cloudflare secret..."
+kubectl create namespace cattle-system || true
 kubectl create namespace cert-manager || true
 kubectl create secret generic cloudflare-api-token-secret \
   --from-literal=api-token="$CLOUDFLARE_API_TOKEN" \
