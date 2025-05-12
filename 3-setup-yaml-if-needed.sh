@@ -3,6 +3,7 @@ set -e
 source ./config.env
 export RANCHER_HOSTNAME
 export CLOUDFLARE_EMAIL
+export CLOUDFLARE_API_TOKEN
 
 echo "[+] Creating Cloudflare secret..."
 kubectl create namespace cattle-system || true
